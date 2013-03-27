@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>订餐</title>
+<link rel="stylesheet"
+	href="lib/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
+
+<script src="lib/jquery.js"></script>
+<script src="lib/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
+
+<script src='data/foods.json' type='text/javascript'>
+	</script>
+<script src='data/restaurants.json' type='text/javascript'></script>
+<script src='data/users.json' type='text/javascript'>
+		
+	</script>
+<script type="text/javascript">
+	//用来保存当前所有的用户名字
+	var arrs=new Array();
+	//i为下面for所用,all是订单的总价钱,orderUsers为当前没下订单的总人数
+	var i=0,all=0.0,noOrderUsers=0;
+	//为下面向div中增加数据所用
+	var li;
+	for(var k=0;k<users.length;k++)
+	{
+		arrs[k]=users[k].name;
+	}
+	$(function()
+	{
+	//从localStorage中取出所有的数据
+	for( i=0;i<localStorage.length;i++){
+	//key(i)获得相应的键，再用getItem()方法获得对应的值
+	var str=localStorage.getItem(localStorage.key(i));
+	//取出的值进行解析
+	var arr=str.split(",");
+	//判断arr中每个子元素的值不能是未定义的
+	if (typeof(arr[0]) != "undefined"&&typeof(arr[1]) != "undefined"&&typeof(arr[2]) != "undefined"&&typeof(arr[3]) != "undefined") {
+	//为了下面的简写方便，故用单个字母来代替，a代表用户名，b代表餐厅名，c和d分别代表选择的套餐名和价钱，e代表
+	//将价钱中的￥和数值分离
+    var a=arr[0];
+	var b=arr[1];
+	var c=arr[2];
+	var d=arr[3];
+	var e=d.split("￥");
+	//将取得的价钱数值进行float转换，默认是字符串类型的
+	all=parseFloat(all)+parseFloat(e[1]);
+	//将当前已有订单的用户从arrs里出去，所以之后从arrs中取出的都是没有订单的人
+	for(var j=0;j<arrs.length;j++)
+	{
+		if(typeof(arrs[j]) != "undefined"&&(arrs[j]==a))
+		{
+			arrs[j]="";
+		}
+	}
+	//判断当前订单的价钱是否超过12，以便有不同的表现
+	if(parseFloat(e[1])<12.0)
+	{
+	li='<br><p align="right">'+d+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>&nbsp;&nbsp;&nbsp;&nbsp;'+a+'<br>&nbsp;&nbsp;&nbsp;&nbsp;'+b+" "+c+'<hr border="1">';
+	}
+	else
+	{
+		li='<br><p align="right" style="color:red">'+d+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>&nbsp;&nbsp;&nbsp;&nbsp;'+a+'<br>&nbsp;&nbsp;&nbsp;&nbsp;'+b+" "+c+'<hr border="1">';
+	}
+	//显示出来的表示当前订单的详细信息
+	$("#orders").after(li);
+	}   
+	}
+	
+	//便利当前没有订单的用户
+	for(var s=0;s<arrs.length;s++)
+	{
+		if(typeof(arrs[s]) != "undefined"&&(arrs[s]!=""))
+		{
+			noOrderUsers++;
+			$("#noorders").after("<font size='3' color='black' font-weight='bold'>&nbsp;&nbsp;&nbsp;&nbsp;"+arrs[s]+"</font><br><br>");
+		}
+	}
+	//判断localStorage中是否有数据,没有数据自然没有遍历，i自然为0
+	if(i>1)
+	{
+	$("#orders").append((users.length-noOrderUsers)+"人已定");
+	$("#noorders").append(noOrderUsers+"人未定");
+	}
+	else
+	{
+		$("#orders").append(0+"人已定");
+		$("#noorders").append((users.length)+"人未定");
+	}
+	//判断i和all的两种情况，不是四种，因为i>=1的话，all必然不为undefined,i<1的话，不用显示总的价钱
+	if(i>=1&&(typeof(all) != "undefined"))
+	{
+	$("#list").append("<p align='center'>"+(users.length-noOrderUsers)+"人已定"+" "+noOrderUsers+"人未定, "+"总计"+all+"元钱"+"</p>");
+	}
+	else if(i<1)
+	{
+		$("#list").append("<p align='center'>"+0+"人已定"+" "+(users.length)+"人未定. "+"</p>");
+	}
+	});
+	</script>
+<script src="js/application.js"></script>
+
+</head>
+<body>
+	<li class="ui-li ui-li-divider ui-bar-d ui-li-has-count"
+		data-role="list-divider" role="heading" id="orders"></li>
+	<li class="ui-li ui-li-divider ui-bar-d ui-li-has-count"
+		data-role="list-divider" role="heading" id="noorders"></li>
+	<li class="ui-li ui-li-divider ui-bar-d ui-li-has-count"
+		data-role="list-divider" role="heading" id="list" align="bottom">
+	</li>
+</body>
+</body>
+</html>

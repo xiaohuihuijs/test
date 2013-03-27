@@ -1,4 +1,4 @@
-var foods = {
+﻿var foods = {
   "KFC":[
       {
           "name":"田园脆鸡堡",
@@ -21,7 +21,7 @@ var foods = {
           "price":15.00
       }
   ],
-  "7-11":[
+  "seven":[
       {
           "name":"全素",
           "price":9.00

@@ -1,23 +1,206 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>订餐</title>
-	<link rel="stylesheet"  href="lib/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>订餐</title>
+<link rel="stylesheet"
+	href="lib/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
 
-    <script src="lib/jquery.js"></script>
-	<script src="lib/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
+<script src="lib/jquery.js"></script>
+<script src="lib/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.js"></script>
+<script src='data/foods.json' type='text/javascript'>
+	
+</script>
+<script src='data/restaurants.json' type='text/javascript'></script>
+<script src='data/users.json' type='text/javascript'>
+	
+</script>
+<script src="js/application.js"></script>
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+						for ( var i = 0; i < users.length; i++) {
+							//向id为people的div里增加所有用户的名字
+							var input = $('<div class="ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="" data-iconpos="" data-theme="c" aria-disabled="false"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">'
+									+ users[i].name
+									+ '</span></span><input class="ui-btn-hidden" type="button" value="'+users[i].name+'"  id="user'+i+'" idaria-disabled="false"></div>');
+							$("#people").append(input);
+						}
+					});
+	$(document)
+			.ready(
+					function() {
+						//向id为restaurant的div里增加所有餐馆的名字
+						for ( var i = 0; i < restaurants.length; i++) {
+							var input1 = $('<div class="ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="" data-iconpos="" data-theme="c" aria-disabled="false"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">'
+									+ restaurants[i].name
+									+ '</span></span><input class="ui-btn-hidden" type="button" value="'+restaurants[i].name+'"  id="restaurant'+i+'" idaria-disabled="false"></div>');
+							$("#restaurant").append(input1);
+						}
+					});
+	$(document)
+			.ready(
+					function() {
+						//增加选套餐按钮的click事件，判断是否已选择餐厅
+						$("#selectFood")
+								.click(
+										function() {
+											if ($("#rest").val() == "") {
+												alert("您还没有选择餐厅");
+											} else {
+												//删除上一次append方式增加的结点
+												var restName = $("#rest").val();
+												var _elm = document
+														.getElementById("food");
+												while (_elm.firstChild)
+													//判断是否有子节点
+													_elm
+															.removeChild(_elm.firstChild);
+												//判断选择的餐馆的名字
+												if (restName == "KFC") {
+													for ( var i = 0; i < foods.KFC.length; i++) {
+														var input = $('<div class="ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="" data-iconpos="" data-theme="c" aria-disabled="false"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">'
+																+ foods.KFC[i].name
+																+ ' ￥'
+																+ foods.KFC[i].price
+																+ '</span></span><input class="ui-btn-hidden" type="button" value="'+foods.KFC[i].name+' ￥'+foods.KFC[i].price +'"  id="food1'+i+'" idaria-disabled="false"><input type="button" value="price: '+foods.KFC[i].price+'"></div>');
+														$("#food")
+																.append(input);
+													}
+												} else if (restName == "7-11") {
+													for ( var i = 0; i < foods.seven.length; i++) {
+														var input = $('<div class="ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="" data-iconpos="" data-theme="c" aria-disabled="false"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">'
+																+ foods.seven[i].name
+																+ ' ￥'
+																+ foods.seven[i].price
+																+ '</span></span><input class="ui-btn-hidden" type="button" value="'+ foods.seven[i].name+' ￥'+ foods.seven[i].price+'"  id="food2'+i+'" idaria-disabled="false"><input type="button" value="price: '+foods.seven[i].price+'"></div>');
+														$("#food")
+																.append(input);
+													}
+												} else if (restName = "成都小吃") {
+													for ( var i = 0; i < foods.成都小吃.length; i++) {
+														var input = $('<div class="ui-btn ui-shadow ui-btn-corner-all ui-btn-up-c" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="" data-iconpos="" data-theme="c" aria-disabled="false"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">'
+																+ foods.成都小吃[i].name
+																+ ' ￥'
+																+ foods.成都小吃[i].price
+																+ '</span></span><input class="ui-btn-hidden" type="button" value="'+ foods.成都小吃[i].name+' ￥'+ foods.成都小吃[i].price+'"  id="food3'+i+'" idaria-disabled="false"><input type="button" value="price: '+foods.成都小吃[i].price+'"></div>');
+														$("#food")
+																.append(input);
+													}
+												}
+											}
+											//向展开的食物列表中的节点增加click时间，点击后隐藏id为food的div
+											$("input[id^=food]").click(
+													function() {
+														$("#fo").val(
+																$(this).val());
+														$("#food").hide(100);
+													});
+										});
+					});
+	$(document)
+			.ready(
+					function() {
+						//再次点击，将以前隐藏的div显示出来
+						$("a[href='#people']").click(function() {
+							$("#people").show(100);
+						});
+						$("a[href='#restaurant']").click(function() {
+							$("#restaurant").show(100);
+						});
+						$("a[href='#food']").click(function() {
+							$("#food").show(100);
+						});
+						//点击后隐藏相应的div
+						$("input[id^=user]").click(function() {
+							$("#peo").val($(this).val());
+							$("#people").hide(100);
+						});
+						$("input[id^=restaurant]").click(function() {
+							$("#rest").val($(this).val());
+							$("#restaurant").hide(100);
+						});
+						//增加确认按钮的事件
+						$("#confirm")
+								.click(
+										function(event) {
+											if (($("#peo").val() == "")
+													|| ($("#rest").val() == "")
+													|| ($("#fo").val() == "")) {
+												//防止链接生效
+												event.preventDefault();
+												alert("用户或餐厅或套餐不能为空!");
 
-    <script src='data/foods.json' type='text/javascript'></script>
-    <script src='data/restaurants.json' type='text/javascript'></script>
-    <script src='data/users.json' type='text/javascript'></script>
+											} else {
+												//判断pageLoadCount在localStorage中是否存在
+												if (!localStorage
+														.getItem("pageLoadCount"))
+													localStorage.setItem(
+															"pageLoadCount", 0);
+												localStorage.pageLoadCount = parseInt(localStorage
+														.getItem("pageLoadCount")) + 1;
+												//将食物和价钱进行分离
+												var array = $("#fo").val()
+														.split(" ");
+												//判断数组中第一个和第二个是否为未定义
+												if (typeof (array[0]) != "undefined"
+														&& typeof (array[1]) != "undefined") {
+													//将当前订单信息通过以逗号分离的字符串的形式放到localStorage中
+													var order = $("#peo").val()
+															+ ","
+															+ $("#rest").val()
+															+ "," + array[0]
+															+ "," + array[1];
+													localStorage
+															.setItem(
+																	"order"
+																			+ localStorage.pageLoadCount,
+																	order);
+													//将localStorage中的pageLoadCount加1
+													localStorage
+															.setItem(
+																	"pageLoadCount",
+																	localStorage.pageLoadCount);
+													alert("提交订单成功!");
+												}
+											}
+										});
 
-    <script src="js/application.js"></script>
+					});
+</script>
+
 
 </head>
 <body>
-Write code here.
+	<div data-role="header">
+		<a href="index.html" data-icon="delete">Back</a>
+		<h1>订餐</h1>
+	</div>
+	<div>
+		&nbsp;&nbsp;&nbsp;<b>人:</b> <br> <input type="text" id="peo"
+			value="" style="text-align: center; color: black" readonly /></br> <a
+			href="#people" data-rel="popup" data-role="button">选人</a>
+
+		<div data-role="popup" id="people" class="ui-content"></div>
+
+		<br /> <br /> &nbsp;&nbsp;&nbsp;<b>餐厅:</b> <br> <input
+			type="text" id="rest" value=""
+			style="text-align: center; color: black" readonly /></br> <a
+			href="#restaurant" data-rel="popup" data-role="button">选餐厅</a>
+
+		<div data-role="popup" id="restaurant" class="ui-content"></div>
+		<br /> <br /> &nbsp;&nbsp;&nbsp;<b>套餐:</b> <br> <input
+			type="text" id="fo" value="" style="text-align: center; color: black"
+			readonly /></br> <a href="#food" data-rel="popup" data-role="button"
+			id="selectFood">选套餐</a>
+
+		<div data-role="popup" id="food" class="ui-content"></div>
+
+		<a href="showOrders.html" data-role="button" id="confirm"
+			rel="external">确认</a>
+	</div>
 </body>
 </body>
 </html>
